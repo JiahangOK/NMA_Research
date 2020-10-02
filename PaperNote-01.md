@@ -1,9 +1,3 @@
----
-toc:
-  depth_from: 2
-  depth_to: 6
-  ordered: false
----
 # Cutting the Cord: Designing a High-quality Untethered VR System with Low Latency Remote Rendering （Mobisys2018）
 
 链接: https://dl.acm.org/doi/10.1145/3210240.3210313
