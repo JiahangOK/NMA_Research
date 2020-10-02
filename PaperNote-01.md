@@ -1,8 +1,9 @@
 # Cutting the Cord: Designing a High-quality Untethered VR System with Low Latency Remote Rendering （Mobisys2018）
 
+[toc]
+
 链接: https://dl.acm.org/doi/10.1145/3210240.3210313
 
-[TOC]
 
 ## 1 内容概述
 
@@ -38,10 +39,11 @@ $$
 
 其中，
 $$
-\begin{aligned}
-T_{stream}&=T_{encode}+T_{trans}+T_{decode} \\
-T_{trans}&=\frac{FrameSize}{Throughout}
-\end{aligned}
+T_{stream}=T_{encode}+T_{trans}+T_{decode}
+$$
+
+$$
+T_{trans}=\frac{FrameSize}{Throughout}
 $$
 
 每个部分的含义如下：  
@@ -99,9 +101,7 @@ $T_{sense}$和$T_{render}$是不能改变的，这篇文章主要针对通过优
 
 现在的商用GPU最多只支持两路视频同时压缩，而文中的方法需要4路，文中提出了多路复用的解决方法，如下图所示。
 
-多路服用的思想：
-
-
+多路复用的思想：
 - encoding session 1
     - left eye's upper half frame 
     - right eye's upper half frame 
@@ -119,5 +119,13 @@ $T_{sense}$和$T_{render}$是不能改变的，这篇文章主要针对通过优
 
 如果有一帧系统渲染的很快，那么这个帧必须在后缓冲中等待下一次的VSync信号到来才能显示出来；如果有一帧系统渲染的很慢，以至于错过了下一次的VSync信号，那么它必须再继续等待后面的VSync信号，才能显示出来。
 
-上面说的机制适用于本地的视频渲染画面展示，并不适用于远程渲染，因为远程渲染中，显示是在HMD上进行的，渲染是在远程服务器上进行的，双缓冲机制会存在一些问题。
+上面说的VSync驱动的渲染机制适用于本地的视频渲染画面展示，但是对于远程渲染会出现新的问题，因为远程渲染中，显示是在HMD上进行的，渲染是在远程服务器上进行的。
+
+![](imgs/f5.png)
+
+上图阐明了这个问题，$T_{render}^{n}$代表开始渲染的时间，$T_{ready}^{n}$代表的是渲染结束并在HMD上解码完成等待显示的时间，(a)展示的是理想情况，(b)展示的是第n帧错过了VSync信号的情况，这会增加端到端的延迟，(c)展示的是第n帧错过了VSync信号，第n+1帧和第n帧在等待同一个VSync的情况，这是就不得不丢掉第n帧，这意味着对第n帧的渲染、编码、传输、解码的操作全都白费了。
+
+为了证明这些问题是存在的，文中还测试了200多个连续视频帧的等待时间$\Delta T^{n}$，它代表$T_{ready}^{n}$和$T_{ready}^{n}$后最近的VSync信号时间的间隔，显示出了上文所说`Long waiting time`和`Missing a frame`的情况，如下图所示。
+
+![](imgs/f6.png)
 
