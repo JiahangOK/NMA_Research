@@ -100,3 +100,20 @@ $T_{sense}$和$T_{render}$是不能改变的，这篇文章主要针对通过优
 然而并不是这样，因为GPU上编解码部分并行的资源是有限的，而且分的slide太多会影响H.264编码的性能，对延迟造成影响，系统的实现也会变得更加复杂。
 
 #### 编码器的多路复用
+
+现在的商用GPU最多只支持两路视频同时压缩，而文中的方法需要4路，文中提出了多路复用的解决方法，如下图所示。
+
+多路服用的思想：
+
+
+- encoding session 1
+    - left eye's upper half frame 
+    - right eye's upper half frame 
+- encoding session 2
+    - left eye's bottom half frame 
+    - right eye's bottom half frame 
+
+![](imgs/f4.png)
+
+### 6 远程垂直同步渲染
+
