@@ -191,7 +191,9 @@ Nvidia’s Video Codec低延迟渲染
 
 修改了GoogleVR SDK中的 VR Camera，下图是与GoogleVR的不同
 
-![](imgs/f8.png)
+<div align="center">
+<img src="imgs/f8.png" width="70%" height="70%"/>
+</div>
 
 #### 并行编码
 
