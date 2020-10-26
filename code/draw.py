@@ -180,7 +180,7 @@ def x_slide_y_f1_latency():
         print(send_time)
         latency = []
         for key in receive_time:
-            if(receive_time[key]-send_time[key] < 200 and receive_time[key]-send_time[key] > 100):
+            if(receive_time[key]-send_time[key] < 200 and receive_time[key]-send_time[key] > 100): # 过滤掉不正常的数据
                 latency.append(receive_time[key]-send_time[key])
         print(latency)
         avg_latency.append(np.mean(latency))
