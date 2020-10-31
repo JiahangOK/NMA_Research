@@ -97,9 +97,10 @@ def hevc_x_qp_y_ssim():
 def x_encodetype_y_filesize_time():
     # qp=10 quality=85 avg_ssim>0.98
     # data
-    quality = ['JPEG', 'HEVC']
+    quality = ['JPEG(quality=85)', 'HEVC(qp=10)','HEVC_I(qp=10)', 'HEVC_P(qp=10)']
     avg_file_size = []
     avg_encode_time = []
+    
     with open('data/jpeg_encode_85_2688.log', 'r', encoding='utf-8') as f:
         line = f.readline()
         file_size = []
@@ -111,23 +112,40 @@ def x_encodetype_y_filesize_time():
             line = f.readline() 
         avg_file_size.append(np.mean(file_size))
         avg_encode_time.append(np.mean(times))
+
     with open('data/encoder_size_2688_10.log', 'r', encoding='utf-8') as f:
         line = f.readline()
         file_size = []
+        file_size_i = []
+        file_size_p = []
         while line: 
             l = line.split('\n')[0]
             if int(l.split(',')[1]) != -1:
                 file_size.append(float(l.split(',')[2]) / 1000)
+                if int(l.split(',')[0]) % 10 == 0:
+                    file_size_i.append(float(l.split(',')[2]) / 1000)
+                else:
+                    file_size_p.append(float(l.split(',')[2]) / 1000)
             line = f.readline() 
         avg_file_size.append(np.mean(file_size))
+        avg_file_size.append(np.mean(file_size_i))
+        avg_file_size.append(np.mean(file_size_p))
     with open('data/encoder_time_2688_10.log', 'r', encoding='utf-8') as f:
         line = f.readline()
         times = []
+        times_i = []
+        times_p = []
         while line: 
             l = line.split('\n')[0]
             times.append(float(l.split(',')[3]))
+            if int(l.split(',')[0]) % 10 == 0:
+                times_i.append(float(l.split(',')[3]))
+            else:
+                times_p.append(float(l.split(',')[3]))
             line = f.readline() 
         avg_encode_time.append(np.mean(times))
+        avg_encode_time.append(np.mean(times_i))
+        avg_encode_time.append(np.mean(times_p))
     
     # draw
     fig, ax= plt.subplots(1, 1, figsize=(8, 6))
