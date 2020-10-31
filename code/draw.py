@@ -97,7 +97,7 @@ def hevc_x_qp_y_ssim():
 def x_encodetype_y_filesize_time():
     # qp=10 quality=85 avg_ssim>0.98
     # data
-    quality = ['JPEG(quality=85)', 'HEVC(qp=10)','HEVC_I(qp=10)', 'HEVC_P(qp=10)']
+    quality = ['JPEG(quality=85)', 'HEVC_P(qp=10)', 'HEVC(qp=10)','HEVC_I(qp=10)']
     avg_file_size = []
     avg_encode_time = []
     
@@ -127,9 +127,10 @@ def x_encodetype_y_filesize_time():
                 else:
                     file_size_p.append(float(l.split(',')[2]) / 1000)
             line = f.readline() 
+        avg_file_size.append(np.mean(file_size_p))
         avg_file_size.append(np.mean(file_size))
         avg_file_size.append(np.mean(file_size_i))
-        avg_file_size.append(np.mean(file_size_p))
+       
     with open('data/encoder_time_2688_10.log', 'r', encoding='utf-8') as f:
         line = f.readline()
         times = []
@@ -143,22 +144,23 @@ def x_encodetype_y_filesize_time():
             else:
                 times_p.append(float(l.split(',')[3]))
             line = f.readline() 
+        avg_encode_time.append(np.mean(times_p))
         avg_encode_time.append(np.mean(times))
         avg_encode_time.append(np.mean(times_i))
-        avg_encode_time.append(np.mean(times_p))
+        
     
     # draw
     fig, ax= plt.subplots(1, 1, figsize=(8, 6))
     ax.yaxis.grid(True, linestyle='--', color='gray', lw=1.)
     x = np.arange(len(quality))
     width = 0.36
-    ax.bar(x-width/2, avg_file_size, width=0.3, color='none', edgecolor=color_arr[4], 
+    ax.bar(x-width/2, avg_file_size, width=0.3, color='none', edgecolor=color_arr[0], 
         hatch=hatches[0], lw=2., label='Encoded Size')
     ax2=ax.twinx()
-    ax2.bar(x+width/2, avg_encode_time, width=0.3, color='none', edgecolor=color_arr[5], 
+    ax2.bar(x+width/2, avg_encode_time, width=0.3, color='none', edgecolor=color_arr[1], 
         hatch=hatches[2], lw=2., label='Encode Time')
 
-    ax.set_xticks([0, 1])
+    ax.set_xticks([0, 1, 2, 3])
     ax.set_xticklabels(quality)
     ax.set_xlabel('Encode Method')
     ax.set_ylabel('Encoded File Size(KB)')
