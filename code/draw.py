@@ -164,7 +164,7 @@ def x_encodetype_y_filesize_time():
     ax.set_xticklabels(quality)
     ax.set_xlabel('Encode Method')
     ax.set_ylabel('Encoded File Size(KB)')
-    ax2.set_ylabel('Encoded Time (ms)')
+    ax2.set_ylabel('Encode Time (ms)')
     fig.legend(loc="best", bbox_transform=ax.transAxes)
     plt.savefig('figs/x_encodetype_y_filesize.png')
     plt.show()
